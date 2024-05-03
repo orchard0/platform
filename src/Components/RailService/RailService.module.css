@@ -1,0 +1,134 @@
+:root {
+	/* --red: #e71b2c; */
+	/* --red: #f7b5bb; */
+	/* Probs best */
+	--red: #f59ea5;
+
+	/* --blue: #2f257d; */
+	/* --blue: #1e000e; */
+	--blue: #3c91e6;
+	/* --blue: #2176ff; */
+	/* --blue: #0f0326; */
+	/* --blue: #345995; */
+	/* --blue: #44355b; */
+
+	--amber: #ffb81d;
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	width: 90vw;
+
+	/* margin-bottom: 20px; */
+}
+
+.container {
+	/* font-size: 24px; */
+	padding: 10px;
+	min-height: 10vh;
+	border: 1px black solid;
+	border-radius: 0.25rem;
+
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: 0.5fr 1fr;
+	grid-auto-columns: 1fr;
+	gap: 0px 0px;
+	grid-auto-flow: column;
+	grid-template-areas:
+		'. . . . . . . . . '
+		'time time timeLate timeLate . . . platform platform'
+		'img img station station station station station platform platform'
+		'. . . . . . . . .';
+}
+
+.time {
+	display: flex;
+	gap: 1vw;
+	justify-content: center;
+	align-items: flex-start;
+	grid-area: time;
+	font-size: 1.2rem;
+	margin: 0;
+}
+
+.timeLate {
+	grid-area: timeLate;
+	margin: 0;
+	color: red;
+	font-size: 1.2rem;
+}
+
+.img {
+	display: flex;
+	justify-content: center;
+	grid-area: img;
+}
+
+.img img {
+	width: 3rem;
+}
+
+.station {
+	display: flex;
+	align-items: center;
+	grid-area: station;
+	font-size: 1.5rem;
+}
+
+.platform {
+	/* height: 50%; */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	/* margin-left: 10px; */
+	grid-area: platform;
+}
+
+.platform .number {
+	height: 3rem;
+	width: 3.5rem;
+	font-size: 2.5rem;
+	color: white;
+	background-color: var(--blue);
+	border: 1px var(--blue) solid;
+	border-radius: 1rem;
+	text-align: center;
+	margin: 0;
+}
+.platform .plat {
+	font-size: 1rem;
+	margin: 0;
+}
+
+.reason {
+	border-bottom: 0;
+	border-radius: 0.25rem;
+	font-size: 0.75rem;
+	padding: 0.25rem;
+}
+
+.delayReason {
+	/* display: flex; */
+	border: 1px var(--amber) solid;
+	background-color: var(--amber);
+}
+.cancelReason {
+	/* display: flex; */
+	border: 1px var(--red) solid;
+	background-color: var(--red);
+	/* color: whi; */
+}
+
+.delay {
+	border-color: var(--amber);
+}
+.delayed {
+	border-color: var(--amber);
+}
+.cancelled {
+	border-color: var(--red);
+}
