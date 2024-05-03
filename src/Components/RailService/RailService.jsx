@@ -19,7 +19,7 @@ export const RailService = (props) => {
 
 				message: props.departures.cancelReason,
 				msgStyles: [styles.reason, styles.cancelReason],
-				containerStyles: [styles.cancelled],
+				containerStyles: [styles.cancelled, styles.msgAbove],
 			});
 		} else if (props.departures.delayReason) {
 			setStyling({
@@ -28,13 +28,15 @@ export const RailService = (props) => {
 
 				message: props.departures.delayReason,
 				msgStyles: [styles.reason, styles.delayReason],
-				containerStyles: [styles.delay],
+				containerStyles: [styles.delay, styles.msgAbove],
 			});
 		} else if (props.departures.etd === 'Cancelled') {
 			setStyling({
 				type: 'Cancelled',
+				message: 'This train has been cancelled.',
+				msgStyles: [styles.reason, styles.cancelReason],
 				etd: props.departures.etd,
-				containerStyles: [styles.cancelled],
+				containerStyles: [styles.cancelled, styles.msgAbove],
 			});
 		}
 		// else if (props.departures.etd === 'Delayed') {
@@ -46,25 +48,35 @@ export const RailService = (props) => {
 		else if (props.departures.etd !== 'On time') {
 			setStyling({
 				type: 'Delayed',
+				message: 'This train has been delayed.',
+				msgStyles: [styles.reason, styles.delayReason],
 				etd: props.departures.etd,
-				containerStyles: [styles.delay],
+				containerStyles: [styles.delay, styles.msgAbove],
 			});
 		}
 	});
 	return (
 		<div class={styles.section}>
 			<Show when={styling.message}>
-				<div class={styling.msgStyles.join(' ')}>{styling.message}</div>
+				<div class={styling.msgStyles.join(' ')}>
+					{' '}
+					<img src="./src/assets/alert.svg" alt="" />{' '}
+					{styling.message}
+				</div>
 			</Show>
 			<div
-				class={`${styles.container} + ${styling.containerStyles.join(
-					' '
-				)}`}>
+				class={
+					styles.container + ' ' + styling.containerStyles.join(' ')
+				}>
 				<div class={styles.time}>{props.departures.std}</div>
+
 				{styling.type ? (
 					<p class={styles.timeLate}>{styling.etd}</p>
 				) : (
-					''
+					<div class={styles.ontime}>
+						<img src="./src/assets/check.svg" alt="" />
+						{props.departures.etd}
+					</div>
 				)}
 				<div class={styles.img}>
 					<img src="./src/assets/train.svg" alt="" />

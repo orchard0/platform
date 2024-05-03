@@ -1,6 +1,6 @@
 import axios from 'axios';
-// import FastestDepartures from '../../Reference/GetFastestDepartures.json';
-// import DepBoard from '../../Reference/GetDepBoardWithDetails.json';
+import FastestDepartures from '../../Reference/GetFastestDepartures.json';
+import DepBoard from '../../Reference/GetDepBoardWithDetails.json';
 const timeout = 0;
 
 const fastest = axios.create({
@@ -109,4 +109,33 @@ const deconstructDepBoard = (data) => {
 	}
 
 	return items;
+};
+
+const stationPickerAPI = axios.create({
+	baseURL: 'https://stationpicker.nationalrail.co.uk/stationPicker',
+});
+
+const stationCleanUp = (data) => {
+	const stationSort = (a, b) => {
+		if (a.name < b.name) return -1;
+		else if (a.name > b.name) return 1;
+		else return 0;
+	};
+
+	const stationFilter = (station) => {
+		if (station.classification !== 'GROUP') return true;
+	};
+
+	return data.filter(stationFilter).sort(stationSort);
+};
+
+export const stationPicker = async (term) => {
+	if (!term) return null;
+	console.log('called');
+	const url = `/${term}`;
+
+	const data = await stationPickerAPI.get(url);
+	if (data.data.status === 'OK') {
+		return stationCleanUp(data.data.payload.stations);
+	}
 };

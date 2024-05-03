@@ -22,9 +22,19 @@
 	font-size: 2rem;
 	width: 70vw;
 	border-radius: 0.5rem;
+	z-index: 0;
 }
 
 .btn {
 	font-size: 2rem;
 	width: 30vw;
+}
+
+.stationsPick {
+	margin: 0;
+	width: 70vw;
+	border: 1px red solid;
+	font-size: 1rem;
+	position: relative;
+	z-index: 1;
 }
