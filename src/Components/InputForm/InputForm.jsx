@@ -1,46 +1,21 @@
-import {
-	For,
-	Show,
-	createEffect,
-	createResource,
-	createSignal,
-} from 'solid-js';
-import { createStore, produce, reconcile } from 'solid-js/store';
+import { For, Show, createEffect } from 'solid-js';
+import { createStore, reconcile } from 'solid-js/store';
 import { getFastestDepartures, getDepBoard, stationPicker } from '../utils';
 
 import styles from './InputForm.module.css';
 import { RailService } from '../RailService/RailService';
 
+import { StationInput } from '../StationInput/StationInput';
 export const InputForm = () => {
-	const delay = (fn, ms) => {
-		let timer = 0;
-		return function (...args) {
-			clearTimeout(timer);
-			timer = setTimeout(fn.bind(this, ...args), ms || 0);
-		};
-	};
-
 	const [searchData, setSearchData] = createStore({
 		from: null,
-		to: 'RMD',
+		to: null,
 		fromName: null,
 		toName: null,
 	});
 
-	const [from, setFrom] = createSignal();
 	const [fastestDepartures, setFastestDepartures] = createStore({});
 	const [nextDepartures, setNextDepartures] = createStore([]);
-	const [stations, { mutate, refetch }] = createResource(from, stationPicker);
-
-	createEffect(() => {
-		// console.log(fastestDepartures.generatedAt);
-		// console.clear();
-
-		for (const station of stations()) {
-			console.log(`${station.name} ${station.crsCode}`);
-		}
-		// console.log(searchData.from);
-	});
 
 	const fetchFastestDepartures = async () => {
 		try {
@@ -71,44 +46,15 @@ export const InputForm = () => {
 	return (
 		<div class={styles.main}>
 			<h1 class={styles.title}>Rail Live</h1>
-			<input
-				class={styles.input}
-				type="from"
-				value={searchData.fromName}
-				onKeyUp={delay((e) => {
-					// setSearchData('from', e.target.value);
-					setFrom(e.target.value);
-				}, 250)}
+			<StationInput
+				setSearchData={setSearchData}
+				searchData={searchData}
+				type={'from'}
 			/>
-			<Show when={true}>
-				<div class={styles.stationsPick}>
-					<For each={stations()}>
-						{(station) => {
-							return (
-								<p
-									onClick={(e) => {
-										setSearchData(
-											produce((state) => {
-												state.fromName = station.name;
-												state.from = station.crsCode;
-											})
-										);
-									}}>
-									{station.name}{' '}
-									<abbr>{station.crsCode}</abbr>
-								</p>
-							);
-						}}
-					</For>
-				</div>
-			</Show>
-			<input
-				class={styles.input}
-				type="to"
-				value={searchData.to}
-				onChange={(e) => {
-					setSearchData('to', e.target.value);
-				}}
+			<StationInput
+				setSearchData={setSearchData}
+				searchData={searchData}
+				type={'to'}
 			/>
 			<button class={styles.btn} onClick={startTimer}>
 				Go

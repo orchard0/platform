@@ -1,7 +1,8 @@
 import axios from 'axios';
 import FastestDepartures from '../../Reference/GetFastestDepartures.json';
 import DepBoard from '../../Reference/GetDepBoardWithDetails.json';
-const timeout = 0;
+import stationList from '../..//Reference/stationPicker.json';
+const timeout = 200;
 
 const fastest = axios.create({
 	baseURL:
@@ -112,10 +113,11 @@ const deconstructDepBoard = (data) => {
 };
 
 const stationPickerAPI = axios.create({
-	baseURL: 'https://stationpicker.nationalrail.co.uk/stationPicker',
+	baseURL: '',
 });
 
 const stationCleanUp = (data) => {
+	console.log(data);
 	const stationSort = (a, b) => {
 		if (a.name < b.name) return -1;
 		else if (a.name > b.name) return 1;
@@ -131,7 +133,13 @@ const stationCleanUp = (data) => {
 
 export const stationPicker = async (term) => {
 	if (!term) return null;
-	console.log('called');
+	if (import.meta.env.VITE_LOCAL)
+		return await new Promise((res) => {
+			setTimeout(() => {
+				res(stationCleanUp(stationList.payload.stations));
+			}, timeout);
+		});
+
 	const url = `/${term}`;
 
 	const data = await stationPickerAPI.get(url);
