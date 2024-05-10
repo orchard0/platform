@@ -3,6 +3,7 @@ import { Show, createEffect, createResource, createSignal } from 'solid-js';
 import { stationPicker } from '../utils';
 import styles from './StationInput.module.css';
 import { produce } from 'solid-js/store';
+import { useSearch } from '../../SearchContext';
 
 const delay = (fn, ms) => {
 	let timer = 0;
@@ -13,6 +14,9 @@ const delay = (fn, ms) => {
 };
 
 export const StationInput = (props) => {
+	const type = props.type;
+	const [searchData, setSearchData] = useSearch();
+
 	const [show, setShow] = createSignal(false);
 	const [stationName, setStationName] = createSignal('');
 	const [stations, { mutate, refetch }] = createResource(
@@ -31,7 +35,7 @@ export const StationInput = (props) => {
 			<input
 				class={styles.input}
 				type="from"
-				value={props.searchData[props.type + 'Name']}
+				value={searchData[type + 'Name']}
 				onKeyUp={delay((e) => {
 					// setSearchData('from', e.target.value);
 					setStationName(e.target.value);
@@ -44,12 +48,11 @@ export const StationInput = (props) => {
 							return (
 								<p
 									onClick={() => {
-										props.setSearchData(
+										setSearchData(
 											produce((state) => {
-												state[props.type + 'Name'] =
+												state[type + 'Name'] =
 													station.name;
-												state[props.type] =
-													station.crsCode;
+												state[type] = station.crsCode;
 											})
 										);
 										setShow(false);

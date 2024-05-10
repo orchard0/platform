@@ -28,21 +28,22 @@ const departureBoard = axios.create({
 
 export const getFastestDepartures = (from, to) => {
 	if (import.meta.env.VITE_LOCAL)
-		return deconstructDepatures(FastestDepartures);
+		return deconstructFastestDepatures(FastestDepartures);
 
 	let url = `/GetFastestDeparturesWithDetails/${from}/${to}`;
 	return fastest.get(url).then((res) => {
-		return deconstructDepatures(res.data);
+		return deconstructFastestDepatures(res.data);
 	});
 };
 
 export const getNextDepartures = (from, to) => {
-	if (import.meta.env.VITE_LOCAL) return deconstructDepatures(DepBoard);
+	if (import.meta.env.VITE_LOCAL)
+		return deconstructFastestDepatures(DepBoard);
 
 	let url = `/GetNextDeparturesWithDetails/${from}/${to}`;
 	return next.get(url).then((res) => {
 		// console.log(res);
-		return deconstructDepatures(res.data);
+		return deconstructFastestDepatures(res.data);
 	});
 };
 
@@ -51,14 +52,16 @@ export const getDepBoard = (from, to) => {
 
 	let url = `/GetDepBoardWithDetails/${from}?filterCrs=${to}`;
 	return departureBoard.get(url).then((res) => {
-		// console.log(res);
-		return deconstructDepBoard(res.data);
+		if (res.data.trainServices) return deconstructDepBoard(res.data);
+		else throw new Error();
 	});
 };
 
-const deconstructDepatures = (data) => {
+const deconstructFastestDepatures = (data) => {
+	let service;
 	const { departures, locationName, nrccMessages, generatedAt } = data;
-	const service = departures[0].service;
+	service = departures[0].service;
+	if (!service) return {};
 	const { isCancelled, platform, std, etd, operator } = service;
 	const { locationName: destination, via } = service.destination[0];
 

@@ -1,6 +1,7 @@
-import { Show, createEffect, createSignal } from 'solid-js';
-import styles from './RailService.module.css';
+import { Show, createEffect } from 'solid-js';
 import { createStore } from 'solid-js/store';
+
+import styles from './RailService.module.css';
 
 export const RailService = (props) => {
 	const [styling, setStyling] = createStore({
@@ -14,44 +15,33 @@ export const RailService = (props) => {
 	createEffect(() => {
 		if (props.departures.cancelReason) {
 			setStyling({
-				type: 'Cancelled',
-				etd: props.departures.etd,
-
 				message: props.departures.cancelReason,
 				msgStyles: [styles.reason, styles.cancelReason],
 				containerStyles: [styles.cancelled, styles.msgAbove],
 			});
 		} else if (props.departures.delayReason) {
 			setStyling({
-				type: 'Delayed',
-				etd: props.departures.etd,
-
 				message: props.departures.delayReason,
 				msgStyles: [styles.reason, styles.delayReason],
 				containerStyles: [styles.delay, styles.msgAbove],
 			});
 		} else if (props.departures.etd === 'Cancelled') {
 			setStyling({
-				type: 'Cancelled',
 				message: 'This train has been cancelled.',
 				msgStyles: [styles.reason, styles.cancelReason],
-				etd: props.departures.etd,
 				containerStyles: [styles.cancelled, styles.msgAbove],
 			});
-		}
-		// else if (props.departures.etd === 'Delayed') {
-		// 	setStyling({
-		// 		type: 'Cancelled',
-		// 		style: [styles.cancelled],
-		// 	});
-		// }
-		else if (props.departures.etd !== 'On time') {
+		} else if (props.departures.etd !== 'On time') {
 			setStyling({
-				type: 'Delayed',
 				message: 'This train has been delayed.',
 				msgStyles: [styles.reason, styles.delayReason],
-				etd: props.departures.etd,
 				containerStyles: [styles.delay, styles.msgAbove],
+			});
+		} else {
+			setStyling({
+				message: null,
+				msgStyles: [],
+				containerStyles: [],
 			});
 		}
 	});
@@ -70,14 +60,15 @@ export const RailService = (props) => {
 				}>
 				<div class={styles.time}>{props.departures.std}</div>
 
-				{styling.type ? (
-					<p class={styles.timeLate}>{styling.etd}</p>
+				{styling.message ? (
+					<p class={styles.timeLate}>{props.departures.etd}</p>
 				) : (
 					<div class={styles.ontime}>
 						<img src="./src/assets/check.svg" alt="" />
 						{props.departures.etd}
 					</div>
 				)}
+
 				<div class={styles.img}>
 					<img src="./src/assets/train.svg" alt="" />
 				</div>
