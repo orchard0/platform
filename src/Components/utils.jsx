@@ -116,7 +116,7 @@ const deconstructDepBoard = (data) => {
 };
 
 const stationPickerAPI = axios.create({
-	baseURL: '',
+	baseURL: import.meta.env.VITE_API,
 });
 
 const stationCleanUp = (data) => {
@@ -127,11 +127,7 @@ const stationCleanUp = (data) => {
 		else return 0;
 	};
 
-	const stationFilter = (station) => {
-		if (station.classification !== 'GROUP') return true;
-	};
-
-	return data.filter(stationFilter).sort(stationSort);
+	return data.sort(stationSort);
 };
 
 export const stationPicker = async (term) => {
@@ -143,10 +139,9 @@ export const stationPicker = async (term) => {
 			}, timeout);
 		});
 
-	const url = `/${term}`;
+	const url = `stationSearch/${term}`;
 
-	const data = await stationPickerAPI.get(url);
-	if (data.data.status === 'OK') {
-		return stationCleanUp(data.data.payload.stations);
-	}
+	const res = await stationPickerAPI.get(url);
+
+	return stationCleanUp(res.data.stations);
 };
