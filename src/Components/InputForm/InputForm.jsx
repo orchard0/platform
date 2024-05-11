@@ -1,26 +1,12 @@
-import {
-	ErrorBoundary,
-	For,
-	Show,
-	Suspense,
-	createEffect,
-	createResource,
-	createSignal,
-} from 'solid-js';
-import { createStore, reconcile } from 'solid-js/store';
-import {
-	getFastestDepartures,
-	getDepBoard,
-	stationPicker,
-	getFastestDeparturesNew,
-} from '../utils';
+import { For, Show } from 'solid-js';
+import { createStore } from 'solid-js/store';
+import { getFastestDepartures, getDepBoard } from '../utils';
 
 import styles from './InputForm.module.css';
 import { RailService } from '../RailService/RailService';
 
 import { StationInput } from '../StationInput/StationInput';
 import { useSearch } from '../../SearchContext';
-import { RailService2 } from '../RailService/RailService2';
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
