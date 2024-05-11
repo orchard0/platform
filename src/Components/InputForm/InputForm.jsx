@@ -5,29 +5,27 @@ import {
 	Suspense,
 	createEffect,
 	createResource,
+	createSignal,
 } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
-import { getFastestDepartures, getDepBoard, stationPicker } from '../utils';
+import {
+	getFastestDepartures,
+	getDepBoard,
+	stationPicker,
+	getFastestDeparturesNew,
+} from '../utils';
 
 import styles from './InputForm.module.css';
 import { RailService } from '../RailService/RailService';
 
 import { StationInput } from '../StationInput/StationInput';
 import { useSearch } from '../../SearchContext';
+import { RailService2 } from '../RailService/RailService2';
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
 	const [fastestDepartures, setFastestDepartures] = createStore({});
 	const [nextDepartures, setNextDepartures] = createStore([]);
-
-	const [profile] = createResource(async () => {
-		return new Promise((res, rej) => {
-			setTimeout(() => {
-				// res({ name: 'hello' });
-				rej('Hi');
-			}, 3000);
-		});
-	});
 
 	const fetchFastestDepartures = async () => {
 		try {
