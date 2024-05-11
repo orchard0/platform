@@ -52,13 +52,12 @@ export const StationInput = (props) => {
 											produce((state) => {
 												state[type + 'Name'] =
 													station.name;
-												state[type] = station.crsCode;
+												state[type] = station.crs;
 											})
 										);
 										setShow(false);
 									}}>
-									{station.name}{' '}
-									<abbr>{station.crsCode}</abbr>
+									{station.name} <abbr>{station.crs}</abbr>
 								</p>
 							);
 						}}

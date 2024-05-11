@@ -64,12 +64,6 @@ export const InputForm = () => {
 			<button class={styles.btn} onClick={startTimer}>
 				Go
 			</button>
-			<ErrorBoundary fallback={<div>Nothing</div>}>
-				{' '}
-				<Suspense fallback={<div>fetching user data</div>}>
-					<div>{profile()?.name}</div>
-				</Suspense>
-			</ErrorBoundary>
 			<Show when={fastestDepartures.locationName}>
 				<p class={styles.titles}>Fastest:</p>
 				<RailService departures={fastestDepartures} />
