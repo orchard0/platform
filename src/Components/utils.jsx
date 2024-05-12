@@ -1,7 +1,7 @@
 import axios from 'axios';
-import FastestDepartures from '../../Reference/GetFastestDepartures.json';
-import DepBoard from '../../Reference/GetDepBoardWithDetails.json';
-import stationList from '../..//Reference/stationPicker.json';
+// import FastestDepartures from '../../Reference/GetFastestDepartures.json';
+// import DepBoard from '../../Reference/GetDepBoardWithDetails.json';
+// import stationList from '../..//Reference/stationPicker.json';
 const timeout = 200;
 
 const fastest = axios.create({
