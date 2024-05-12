@@ -121,13 +121,6 @@ const stationPickerAPI = axios.create({
 
 const stationCleanUp = (data) => {
 	console.log(data);
-	const stationSort = (a, b) => {
-		if (a.name < b.name) return -1;
-		else if (a.name > b.name) return 1;
-		else return 0;
-	};
-
-	return data.sort(stationSort);
 };
 
 export const stationPicker = async (term) => {
@@ -143,5 +136,11 @@ export const stationPicker = async (term) => {
 
 	const res = await stationPickerAPI.get(url);
 
-	return stationCleanUp(res.data.stations);
+	const stationSort = (a, b) => {
+		if (a.name < b.name) return -1;
+		else if (a.name > b.name) return 1;
+		else return 0;
+	};
+
+	return res.data.stations.sort(stationSort);
 };

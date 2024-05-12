@@ -1,5 +1,5 @@
 import { For, Show } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createStore, unwrap } from 'solid-js/store';
 import { getFastestDepartures, getDepBoard } from '../utils';
 
 import styles from './InputForm.module.css';
@@ -7,11 +7,14 @@ import { RailService } from '../RailService/RailService';
 
 import { StationInput } from '../StationInput/StationInput';
 import { useSearch } from '../../SearchContext';
+import { useRecentSearch } from '../../RecentSearchesContext';
+
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
 	const [fastestDepartures, setFastestDepartures] = createStore({});
 	const [nextDepartures, setNextDepartures] = createStore([]);
+	const [recentSearches, setRecentSearches] = useRecentSearch();
 
 	const fetchFastestDepartures = async () => {
 		try {
@@ -38,6 +41,48 @@ export const InputForm = () => {
 	const startTimer = async () => {
 		fetchFastestDepartures();
 		fetchNextDepartures();
+
+		if (!recentSearches) setRecentSearches([]);
+		const existsSearch = recentSearches.find((item) => {
+			if (item.from === searchData.from && item.to === searchData.to)
+				return true;
+		});
+		const existsSearchIndex = recentSearches.findIndex((item) => {
+			if (item.from === searchData.from && item.to === searchData.to)
+				return true;
+		});
+
+		console.log(existsSearch);
+
+		if (existsSearchIndex === -1) {
+			const newSearch = {
+				from: searchData.from,
+				fromName: searchData.fromName,
+				to: searchData.to,
+				toName: searchData.toName,
+				count: 1,
+			};
+			setRecentSearches((prev) => [newSearch, ...prev]);
+		} else {
+			let { count, ...rest } = existsSearch;
+			count += 1 || 0;
+			const updatedSearch = { count, ...rest };
+			setRecentSearches((prev) => [
+				updatedSearch,
+				...prev.filter((item) => {
+					if (
+						item.from !== searchData.from &&
+						item.to !== searchData.to
+					)
+						return true;
+				}),
+			]);
+		}
+
+		localStorage.setItem(
+			'recentSearches',
+			JSON.stringify(unwrap(recentSearches))
+		);
 	};
 
 	return (

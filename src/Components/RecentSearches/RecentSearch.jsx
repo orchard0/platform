@@ -1,17 +1,17 @@
 import { useSearch } from '../../SearchContext';
-import styles from './Search.module.css';
+import styles from './RecentSearch.module.css';
 
-export const Search = (props) => {
+export const RecentSearch = (props) => {
 	const [searchData, setSearchData] = useSearch();
-	const from = props.search.from;
-	const to = props.search.to;
+	const from = props.search.fromName;
+	const to = props.search.toName;
 
 	const updateSearchInput = () => {
 		// change both the searchInput and sort the array so it shows this as the first item
 		setSearchData({
-			from: from,
+			from: props.search.from,
 			fromName: from,
-			to: to,
+			to: props.search.to,
 			toName: to,
 		});
 		console.log(from, to);
