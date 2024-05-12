@@ -132,7 +132,7 @@ export const stationPicker = async (term) => {
 			}, timeout);
 		});
 
-	const url = `stationSearch/${term}`;
+	const url = `stations/${term}`;
 
 	const res = await stationPickerAPI.get(url);
 
