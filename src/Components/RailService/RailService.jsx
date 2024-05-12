@@ -64,13 +64,13 @@ export const RailService = (props) => {
 					<p class={styles.timeLate}>{props.departures.etd}</p>
 				) : (
 					<div class={styles.ontime}>
-						<img src="/static/check.svg" alt="" />
+						<img src="/static/icons/check.svg" alt="" />
 						{props.departures.etd}
 					</div>
 				)}
 
 				<div class={styles.img}>
-					<img src="/static/train.svg" alt="" />
+					<img src="/static/icons/train.svg" alt="" />
 				</div>
 				<div class={styles.station}>{props.departures.destination}</div>
 				<Show when={props.departures.platform}>
