@@ -96,11 +96,13 @@ export const InputForm = () => {
 			<Show when={fastestDepartures.locationName}>
 				<p class={styles.titles}>Fastest:</p>
 				<RailService departures={fastestDepartures} />
+			</Show>
+			<Show when={nextDepartures.locationName}>
 				<p class={styles.titles}>Departures:</p>
 				<For each={nextDepartures}>
-					{(departure) => {
-						return <RailService departures={departure} />;
-					}}
+				{(departure) => {
+					return <RailService departures={departure} />;
+				}}
 				</For>
 			</Show>
 		</div>

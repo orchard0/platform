@@ -6,14 +6,14 @@ const timeout = 200;
 
 const fastest = axios.create({
 	baseURL:
-		'https://api1.raildata.org.uk/1010-live-fastest-departures/LDBWS/api/20220120',
+		'https://api1.raildata.org.uk/1010-live-fastest-departures-staff-version/LDBSVWS/api/20220120',
 	headers: {
 		'x-apikey': import.meta.env.VITE_FASTEST,
 	},
 });
 const next = axios.create({
 	baseURL:
-		'https://api1.raildata.org.uk/1010-live-next-departure-board/LDBWS/api/20220120',
+		'https://api1.raildata.org.uk/1010-live-next-departures-board---staff-version/LDBSVWS/api/20220120',
 	headers: {
 		'x-apikey': import.meta.env.VITE_NEXT,
 	},
@@ -30,7 +30,9 @@ export const getFastestDepartures = (from, to) => {
 	if (import.meta.env.VITE_LOCAL)
 		return deconstructFastestDepatures(FastestDepartures);
 
-	let url = `/GetFastestDeparturesWithDetails/${from}/${to}`;
+	const datetime = new Date().toISOString().replaceAll('-', '').replaceAll(':', '').slice(0, -5)
+
+	let url = `/GetFastestDeparturesWithDetails/${from}/${to}/${datetime}`;
 	return fastest.get(url).then((res) => {
 		return deconstructFastestDepatures(res.data);
 	});
@@ -40,7 +42,10 @@ export const getNextDepartures = (from, to) => {
 	if (import.meta.env.VITE_LOCAL)
 		return deconstructFastestDepatures(DepBoard);
 
-	let url = `/GetNextDeparturesWithDetails/${from}/${to}`;
+	const datetime = new Date().toISOString().replaceAll('-', '').replaceAll(':', '').slice(0, -5)
+	console.log(datetime)
+
+	let url = `/GetNextDeparturesWithDetails/${from}/${to}/${datetime}`;
 	return next.get(url).then((res) => {
 		// console.log(res);
 		return deconstructFastestDepatures(res.data);
