@@ -1,6 +1,10 @@
 import { For, Show } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
-import { getFastestDepartures, getDepartures } from '../utils';
+import {
+	getFastestDepartures,
+	getNextDepartures,
+	getDepartures,
+} from '../utils';
 
 import styles from './InputForm.module.css';
 import { RailService } from '../RailService/RailService';
@@ -13,6 +17,7 @@ export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
 	const [fastestDepartures, setFastestDepartures] = createStore([]);
+	const [nextDepartures, setNextDepartures] = createStore([]);
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
 
@@ -23,6 +28,18 @@ export const InputForm = () => {
 				searchData.to
 			);
 			setFastestDepartures(data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const genNextDepartures = async () => {
+		try {
+			const data = await getNextDepartures(
+				searchData.from,
+				searchData.to
+			);
+			setNextDepartures(data);
 		} catch (err) {
 			console.log(err);
 		}
@@ -39,6 +56,7 @@ export const InputForm = () => {
 
 	const startTimer = async () => {
 		genFastestDepartures();
+		genNextDepartures();
 		genDepartures();
 
 		if (!recentSearches) setRecentSearches([]);
@@ -91,7 +109,7 @@ export const InputForm = () => {
 				Go
 			</button>
 			<Show when={fastestDepartures.length}>
-				<p class={styles.titles}>Fastest:</p>
+				<p class={styles.titles}>Fastest departure:</p>
 				<For each={fastestDepartures}>
 					{(departure) => {
 						console.log(departure);
@@ -99,8 +117,17 @@ export const InputForm = () => {
 					}}
 				</For>
 			</Show>
+			<Show when={nextDepartures.length}>
+				<p class={styles.titles}>Next departure:</p>
+				<For each={nextDepartures}>
+					{(departure) => {
+						console.log(departure);
+						return <RailService departures={departure} />;
+					}}
+				</For>
+			</Show>
 			<Show when={departures.length}>
-				<p class={styles.titles}>Departures:</p>
+				<p class={styles.titles}>All departures:</p>
 				<For each={departures}>
 					{(departure) => {
 						return <RailService departures={departure} />;
