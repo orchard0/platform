@@ -1,6 +1,6 @@
 import { For, Show } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
-import { getFastestDepartures, getDepBoard } from '../utils';
+import { getFastestDepartures, getDepartures } from '../utils';
 
 import styles from './InputForm.module.css';
 import { RailService } from '../RailService/RailService';
@@ -12,11 +12,11 @@ import { useRecentSearch } from '../../RecentSearchesContext';
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
-	const [fastestDepartures, setFastestDepartures] = createStore({});
-	const [nextDepartures, setNextDepartures] = createStore([]);
+	const [fastestDepartures, setFastestDepartures] = createStore([]);
+	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
 
-	const fetchFastestDepartures = async () => {
+	const genFastestDepartures = async () => {
 		try {
 			const data = await getFastestDepartures(
 				searchData.from,
@@ -28,19 +28,18 @@ export const InputForm = () => {
 		}
 	};
 
-	const fetchNextDepartures = async () => {
+	const genDepartures = async () => {
 		try {
-			const data = await getDepBoard(searchData.from, searchData.to);
-			console.log(data);
-			setNextDepartures(data);
+			const data = await getDepartures(searchData.from, searchData.to);
+			setDepartures(data);
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
 	const startTimer = async () => {
-		fetchFastestDepartures();
-		fetchNextDepartures();
+		genFastestDepartures();
+		genDepartures();
 
 		if (!recentSearches) setRecentSearches([]);
 		const existsSearch = recentSearches.find((item) => {
@@ -51,8 +50,6 @@ export const InputForm = () => {
 			if (item.from === searchData.from && item.to === searchData.to)
 				return true;
 		});
-
-		console.log(existsSearch);
 
 		if (existsSearchIndex === -1) {
 			const newSearch = {
@@ -93,16 +90,21 @@ export const InputForm = () => {
 			<button class={styles.btn} onClick={startTimer}>
 				Go
 			</button>
-			<Show when={fastestDepartures.locationName}>
+			<Show when={fastestDepartures.length}>
 				<p class={styles.titles}>Fastest:</p>
-				<RailService departures={fastestDepartures} />
+				<For each={fastestDepartures}>
+					{(departure) => {
+						console.log(departure);
+						return <RailService departures={departure} />;
+					}}
+				</For>
 			</Show>
-			<Show when={nextDepartures.locationName}>
+			<Show when={departures.length}>
 				<p class={styles.titles}>Departures:</p>
-				<For each={nextDepartures}>
-				{(departure) => {
-					return <RailService departures={departure} />;
-				}}
+				<For each={departures}>
+					{(departure) => {
+						return <RailService departures={departure} />;
+					}}
 				</For>
 			</Show>
 		</div>
