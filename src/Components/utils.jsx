@@ -40,7 +40,7 @@ export const getFastestDepartures = (from, to) => {
 
 	let url = `/GetFastestDeparturesWithDetails/${from}/${to}/${genDatetime()}`;
 	return fastest.get(url).then((res) => {
-		console.log(res.data);
+		// console.log(res.data);
 		return deconstructFastestDepatures(res.data);
 	});
 };
@@ -60,7 +60,7 @@ export const getDepartures = (from, to) => {
 
 	let url = `/GetDepBoardWithDetails/${from}?filterCrs=${to}`;
 	return departureBoard.get(url).then((res) => {
-		console.log(res.data);
+		// console.log(res.data);
 		if (res.data.trainServices) return deconstructDepBoard(res.data);
 		else throw new Error();
 	});
@@ -136,7 +136,7 @@ const stationPickerAPI = axios.create({
 });
 
 const stationCleanUp = (data) => {
-	console.log(data);
+	// console.log(data);
 };
 
 export const stationPicker = async (term) => {

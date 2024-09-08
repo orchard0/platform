@@ -14,7 +14,6 @@ export const RecentSearch = (props) => {
 			to: props.search.to,
 			toName: to,
 		});
-		console.log(from, to);
 	};
 	return (
 		<div

@@ -112,7 +112,6 @@ export const InputForm = () => {
 				<p class={styles.titles}>Fastest departure:</p>
 				<For each={fastestDepartures}>
 					{(departure) => {
-						console.log(departure);
 						return <RailService departures={departure} />;
 					}}
 				</For>
@@ -121,7 +120,6 @@ export const InputForm = () => {
 				<p class={styles.titles}>Next departure:</p>
 				<For each={nextDepartures}>
 					{(departure) => {
-						console.log(departure);
 						return <RailService departures={departure} />;
 					}}
 				</For>
