@@ -34,6 +34,7 @@ export const StationInput = (props) => {
 		<>
 			<input
 				class={styles.input}
+				placeholder={type}
 				type="from"
 				value={searchData[type + 'Name']}
 				onKeyUp={delay((e) => {
