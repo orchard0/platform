@@ -75,8 +75,10 @@ const deconstructFastestDepatures = (data) => {
 	let { std, etd } = service;
 	const { locationName: destination, via } = service.destination[0];
 
-	std = std.slice(11, 16);
+	// no etd is returned in the response if the train is delayed!
+	if (!etd) etd = '-';
 	etd = etd.slice(11, 16);
+	std = std.slice(11, 16);
 	if (etd == std) etd = 'On time';
 
 	return [
