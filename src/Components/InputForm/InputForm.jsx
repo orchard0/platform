@@ -17,7 +17,7 @@ export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
 	const [fastestDepartures, setFastestDepartures] = createStore([]);
-	const [nextDepartures, setNextDepartures] = createStore([]);
+	// const [nextDepartures, setNextDepartures] = createStore([]);
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
 
@@ -33,17 +33,17 @@ export const InputForm = () => {
 		}
 	};
 
-	const genNextDepartures = async () => {
-		try {
-			const data = await getNextDepartures(
-				searchData.from,
-				searchData.to
-			);
-			setNextDepartures(data);
-		} catch (err) {
-			console.log(err);
-		}
-	};
+	// const genNextDepartures = async () => {
+	// 	try {
+	// 		const data = await getNextDepartures(
+	// 			searchData.from,
+	// 			searchData.to
+	// 		);
+	// 		setNextDepartures(data);
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// };
 
 	const genDepartures = async () => {
 		try {
@@ -56,7 +56,7 @@ export const InputForm = () => {
 
 	const startTimer = async () => {
 		genFastestDepartures();
-		genNextDepartures();
+		// genNextDepartures();
 		genDepartures();
 
 		if (!recentSearches) setRecentSearches([]);
@@ -102,7 +102,7 @@ export const InputForm = () => {
 
 	return (
 		<div class={styles.main}>
-			<h1 class={styles.title}>Rail Live</h1>
+			<h1 class={styles.title}>Platform</h1>
 			<StationInput type={'from'} />
 			<StationInput type={'to'} />
 			<button class={styles.btn} onClick={startTimer}>
@@ -116,14 +116,14 @@ export const InputForm = () => {
 					}}
 				</For>
 			</Show>
-			<Show when={nextDepartures.length}>
+			{/* <Show when={nextDepartures.length}>
 				<p class={styles.titles}>Next departure:</p>
 				<For each={nextDepartures}>
 					{(departure) => {
 						return <RailService departures={departure} />;
 					}}
 				</For>
-			</Show>
+			</Show> */}
 			<Show when={departures.length}>
 				<p class={styles.titles}>All departures:</p>
 				<For each={departures}>
