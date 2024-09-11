@@ -1,8 +1,8 @@
-import { For, Show } from 'solid-js';
+import { createEffect, For, Show } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
 import {
 	getFastestDepartures,
-	getNextDepartures,
+	// getNextDepartures,
 	getDepartures,
 } from '../utils';
 
@@ -20,6 +20,7 @@ export const InputForm = () => {
 	// const [nextDepartures, setNextDepartures] = createStore([]);
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
+	const [error, setError] = useRecentSearch(false);
 
 	const genFastestDepartures = async () => {
 		try {
@@ -30,8 +31,12 @@ export const InputForm = () => {
 			setFastestDepartures(data);
 		} catch (err) {
 			console.log(err);
+			setFastestDepartures([]);
 		}
 	};
+	createEffect(() => {
+		if (!fastestDepartures && !departures) setError(true);
+	});
 
 	// const genNextDepartures = async () => {
 	// 	try {
@@ -51,6 +56,7 @@ export const InputForm = () => {
 			setDepartures(data);
 		} catch (err) {
 			console.log(err);
+			setDepartures([]);
 		}
 	};
 
@@ -131,6 +137,9 @@ export const InputForm = () => {
 						return <RailService departures={departure} />;
 					}}
 				</For>
+			</Show>
+			<Show when={error}>
+				<p>No services found!</p>
 			</Show>
 		</div>
 	);

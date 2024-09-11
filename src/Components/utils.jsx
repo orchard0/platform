@@ -40,8 +40,9 @@ export const getFastestDepartures = (from, to) => {
 
 	let url = `/GetFastestDeparturesWithDetails/${from}/${to}/${genDatetime()}`;
 	return fastest.get(url).then((res) => {
-		// console.log(res.data);
-		return deconstructFastestDepatures(res.data);
+		const data = deconstructFastestDepatures(res.data);
+		if (data) return data;
+		else throw new Error();
 	});
 };
 
@@ -60,8 +61,8 @@ export const getDepartures = (from, to) => {
 
 	let url = `/GetDepBoardWithDetails/${from}?filterCrs=${to}`;
 	return departureBoard.get(url).then((res) => {
-		// console.log(res.data);
-		if (res.data.trainServices) return deconstructDepBoard(res.data);
+		const data = deconstructDepBoard(res.data);
+		if (data) return data;
 		else throw new Error();
 	});
 };
