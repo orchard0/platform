@@ -1,9 +1,11 @@
-import { Show, createEffect } from 'solid-js';
+import { Show, createEffect, splitProps } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import styles from './RailService.module.css';
 
 export const RailService = (props) => {
+	const [data] = splitProps(props, ['departures']);
+	const { departures: service } = data;
 	const [styling, setStyling] = createStore({
 		alteration: false,
 		type: null,
@@ -13,25 +15,25 @@ export const RailService = (props) => {
 	});
 
 	createEffect(() => {
-		if (props.departures.cancelReason) {
+		if (service.cancelReason) {
 			setStyling({
-				message: props.departures.cancelReason,
+				message: service.cancelReason,
 				msgStyles: [styles.reason, styles.cancelReason],
 				containerStyles: [styles.cancelled, styles.msgAbove],
 			});
-		} else if (props.departures.delayReason) {
+		} else if (service.delayReason) {
 			setStyling({
-				message: props.departures.delayReason,
+				message: service.delayReason,
 				msgStyles: [styles.reason, styles.delayReason],
 				containerStyles: [styles.delay, styles.msgAbove],
 			});
-		} else if (props.departures.etd === 'Cancelled') {
+		} else if (service.etd === 'Cancelled') {
 			setStyling({
 				message: 'This train has been cancelled.',
 				msgStyles: [styles.reason, styles.cancelReason],
 				containerStyles: [styles.cancelled, styles.msgAbove],
 			});
-		} else if (props.departures.etd !== 'On time') {
+		} else if (service.etd !== 'On time') {
 			setStyling({
 				message: 'This train has been delayed.',
 				msgStyles: [styles.reason, styles.delayReason],
@@ -58,26 +60,26 @@ export const RailService = (props) => {
 				class={
 					styles.container + ' ' + styling.containerStyles.join(' ')
 				}>
-				<div class={styles.time}>{props.departures.std}</div>
+				<div class={styles.time}>{service.std}</div>
 
 				{styling.message ? (
-					<p class={styles.timeLate}>{props.departures.etd}</p>
+					<p class={styles.timeLate}>{service.etd}</p>
 				) : (
 					<div class={styles.ontime}>
 						<img src="/static/icons/check.svg" alt="" />
-						{props.departures.etd}
+						{service.etd}
 					</div>
 				)}
 
 				<div class={styles.img}>
 					<img src="/static/icons/train.svg" alt="" />
 				</div>
-				<div class={styles.station}>{props.departures.destination}</div>
-				<Show when={props.departures.platform}>
+				<div class={styles.station}>{service.destination}</div>
+				<Show when={service.platform}>
 					{' '}
 					<div class={styles.platform}>
 						<p class={styles.plat}>Platform</p>
-						<p class={styles.number}>{props.departures.platform}</p>
+						<p class={styles.number}>{service.platform}</p>
 					</div>
 				</Show>
 			</div>

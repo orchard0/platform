@@ -1,10 +1,6 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
-import {
-	getFastestDepartures,
-	// getNextDepartures,
-	getDepartures,
-} from '../utils';
+import { fetchServices } from '../utils';
 
 import styles from './InputForm.module.css';
 import { RailService } from '../RailService/RailService';
@@ -16,56 +12,31 @@ import { useRecentSearch } from '../../RecentSearchesContext';
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
-	const [fastestDepartures, setFastestDepartures] = createStore([]);
+	const [services, setServices] = createStore([]);
 	// const [nextDepartures, setNextDepartures] = createStore([]);
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
 	const [errorMsg, setErrorMsg] = createSignal(false);
 
-	const genFastestDepartures = async () => {
+	const getServices = async () => {
 		try {
-			const data = await getFastestDepartures(
+			const { services, generatedAt } = await fetchServices(
 				searchData.from,
 				searchData.to
 			);
-			setFastestDepartures(data);
+			setServices(services);
 		} catch (err) {
 			console.log(err);
-			setFastestDepartures([]);
+			setServices([]);
 			setErrorMsg('No services found!');
 		}
 	};
 	createEffect(() => {
-		if (fastestDepartures && departures) setErrorMsg(false);
+		if (services && departures) setErrorMsg(false);
 	});
 
-	// const genNextDepartures = async () => {
-	// 	try {
-	// 		const data = await getNextDepartures(
-	// 			searchData.from,
-	// 			searchData.to
-	// 		);
-	// 		setNextDepartures(data);
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
-
-	const genDepartures = async () => {
-		try {
-			const data = await getDepartures(searchData.from, searchData.to);
-			setDepartures(data);
-		} catch (err) {
-			console.log(err);
-			setDepartures([]);
-			setErrorMsg('No services found!');
-		}
-	};
-
 	const startTimer = async () => {
-		genFastestDepartures();
-		// genNextDepartures();
-		genDepartures();
+		getServices();
 
 		if (!recentSearches) setRecentSearches([]);
 		const existsSearch = recentSearches.find((item) => {
@@ -116,25 +87,9 @@ export const InputForm = () => {
 			<button class={styles.btn} onClick={startTimer}>
 				Go
 			</button>
-			<Show when={fastestDepartures.length}>
-				<p class={styles.titles}>Fastest departure:</p>
-				<For each={fastestDepartures}>
-					{(departure) => {
-						return <RailService departures={departure} />;
-					}}
-				</For>
-			</Show>
-			{/* <Show when={nextDepartures.length}>
-				<p class={styles.titles}>Next departure:</p>
-				<For each={nextDepartures}>
-					{(departure) => {
-						return <RailService departures={departure} />;
-					}}
-				</For>
-			</Show> */}
-			<Show when={departures.length}>
-				<p class={styles.titles}>All departures:</p>
-				<For each={departures}>
+			<Show when={services.length}>
+				<p class={styles.titles}>Services:</p>
+				<For each={services}>
 					{(departure) => {
 						return <RailService departures={departure} />;
 					}}
