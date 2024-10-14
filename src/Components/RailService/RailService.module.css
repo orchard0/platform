@@ -5,12 +5,16 @@
 	--green: #5fad41;
 }
 
-.section {
+.main {
 	display: flex;
 	flex-direction: column;
 	width: 90vw;
+}
 
-	/* margin-bottom: 20px; */
+.section {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 }
 
 .container {
@@ -147,6 +151,13 @@
 	border-top-right-radius: 0;
 }
 
+.msgBelow {
+	border-bottom: 0;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	padding-bottom: 0;
+}
+
 .delay {
 	border-color: var(--amber);
 }
@@ -155,4 +166,23 @@
 }
 .cancelled {
 	border-color: var(--red);
+}
+
+.sideMessage {
+	display: flex;
+	gap: 0.125rem;
+	border-radius: 0.25rem;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	font-size: 0.75rem;
+	padding: 0.25rem;
+	padding-top: 10px;
+	border: 2px var(--green) solid;
+	border-color: var(--green);
+	justify-content: center;
+	border-top: 0;
+}
+
+.circle {
+	font-weight: 700;
 }

@@ -2,8 +2,11 @@ import { Show, createEffect, splitProps } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import styles from './RailService.module.css';
+import { useSearch } from '../../SearchContext';
 
 export const RailService = (props) => {
+	const [searchData, setSearchData] = useSearch();
+
 	const [data] = splitProps(props, ['departures']);
 	const { departures: service } = data;
 	const [styling, setStyling] = createStore({
@@ -46,43 +49,60 @@ export const RailService = (props) => {
 				containerStyles: [],
 			});
 		}
+		if (service.type.includes('fastest')) {
+			setStyling(
+				'containerStyles',
+				styling.containerStyles.length,
+				styles.msgBelow
+			);
+		}
 	});
 	return (
-		<div class={styles.section}>
-			<Show when={styling.message}>
-				<div class={styling.msgStyles.join(' ')}>
-					{' '}
-					<img src="./src/assets/alert.svg" alt="" />{' '}
-					{styling.message}
-				</div>
-			</Show>
-			<div
-				class={
-					styles.container + ' ' + styling.containerStyles.join(' ')
-				}>
-				<div class={styles.time}>{service.std}</div>
-
-				{styling.message ? (
-					<p class={styles.timeLate}>{service.etd}</p>
-				) : (
-					<div class={styles.ontime}>
-						<img src="/static/icons/check.svg" alt="" />
-						{service.etd}
-					</div>
-				)}
-
-				<div class={styles.img}>
-					<img src="/static/icons/train.svg" alt="" />
-				</div>
-				<div class={styles.station}>{service.destination}</div>
-				<Show when={service.platform}>
-					{' '}
-					<div class={styles.platform}>
-						<p class={styles.plat}>Platform</p>
-						<p class={styles.number}>{service.platform}</p>
+		<div class={styles.main}>
+			<div class={styles.section}>
+				<Show when={styling.message}>
+					<div class={styling.msgStyles.join(' ')}>
+						{' '}
+						<img src="./src/assets/alert.svg" alt="" />{' '}
+						{styling.message}
 					</div>
 				</Show>
+				<div
+					class={
+						styles.container +
+						' ' +
+						styling.containerStyles.join(' ')
+					}>
+					<div class={styles.time}>{service.std}</div>
+
+					{styling.message ? (
+						<p class={styles.timeLate}>{service.etd}</p>
+					) : (
+						<div class={styles.ontime}>
+							<img src="/static/icons/check.svg" alt="" />
+							{service.etd}
+						</div>
+					)}
+
+					<div class={styles.img}>
+						<img src="/static/icons/train.svg" alt="" />
+					</div>
+					<div class={styles.station}>{service.destination}</div>
+					<Show when={service.platform}>
+						{' '}
+						<div class={styles.platform}>
+							<p class={styles.plat}>Platform</p>
+							<p class={styles.number}>{service.platform}</p>
+						</div>
+					</Show>
+				</div>
 			</div>
+			<Show when={styling.containerStyles.includes(styles.msgBelow)}>
+				<div class={styles.sideMessage}>
+					This is the <span class={styles.circle}>fastest</span>{' '}
+					service to {searchData.toName}.
+				</div>
+			</Show>
 		</div>
 	);
 };
