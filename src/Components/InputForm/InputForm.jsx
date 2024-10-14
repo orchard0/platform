@@ -12,27 +12,26 @@ import { useRecentSearch } from '../../RecentSearchesContext';
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
 
-	const [services, setServices] = createStore([]);
-	// const [nextDepartures, setNextDepartures] = createStore([]);
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
 	const [errorMsg, setErrorMsg] = createSignal(false);
 
 	const getServices = async () => {
+		let services;
 		try {
-			const { services, generatedAt } = await fetchServices(
+			({ services, generatedAt } = await fetchServices(
 				searchData.from,
 				searchData.to
-			);
-			setServices(services);
+			));
 		} catch (err) {
 			console.log(err);
-			setServices([]);
+			setDepartures([]);
 			setErrorMsg('No services found!');
 		}
+		setDepartures(services);
 	};
 	createEffect(() => {
-		if (services && departures) setErrorMsg(false);
+		if (departures.length) setErrorMsg(false);
 	});
 
 	const startTimer = async () => {
@@ -87,9 +86,9 @@ export const InputForm = () => {
 			<button class={styles.btn} onClick={startTimer}>
 				Go
 			</button>
-			<Show when={services.length}>
+			<Show when={departures.length}>
 				<p class={styles.titles}>Services:</p>
-				<For each={services}>
+				<For each={departures}>
 					{(departure) => {
 						return <RailService departures={departure} />;
 					}}
