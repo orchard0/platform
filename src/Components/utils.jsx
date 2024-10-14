@@ -61,8 +61,7 @@ export const getDepartures = (from, to) => {
 
 	let url = `/GetDepBoardWithDetails/${from}?filterCrs=${to}`;
 	return departureBoard.get(url).then((res) => {
-		const data = deconstructDepBoard(res.data);
-		if (data) return data;
+		if (res.data.trainServices) return deconstructDepBoard(res.data);
 		else throw new Error();
 	});
 };

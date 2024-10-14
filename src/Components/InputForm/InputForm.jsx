@@ -1,4 +1,4 @@
-import { createEffect, For, Show } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
 import {
 	getFastestDepartures,
@@ -20,7 +20,7 @@ export const InputForm = () => {
 	// const [nextDepartures, setNextDepartures] = createStore([]);
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();
-	const [error, setError] = useRecentSearch(false);
+	const [errorMsg, setErrorMsg] = createSignal(false);
 
 	const genFastestDepartures = async () => {
 		try {
@@ -32,10 +32,11 @@ export const InputForm = () => {
 		} catch (err) {
 			console.log(err);
 			setFastestDepartures([]);
+			setErrorMsg('No services found!');
 		}
 	};
 	createEffect(() => {
-		if (!fastestDepartures && !departures) setError(true);
+		if (fastestDepartures && departures) setErrorMsg(false);
 	});
 
 	// const genNextDepartures = async () => {
@@ -57,6 +58,7 @@ export const InputForm = () => {
 		} catch (err) {
 			console.log(err);
 			setDepartures([]);
+			setErrorMsg('No services found!');
 		}
 	};
 
@@ -138,8 +140,8 @@ export const InputForm = () => {
 					}}
 				</For>
 			</Show>
-			<Show when={error}>
-				<p>No services found!</p>
+			<Show when={errorMsg}>
+				<p>{errorMsg()}</p>
 			</Show>
 		</div>
 	);
