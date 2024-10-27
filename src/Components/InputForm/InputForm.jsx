@@ -8,9 +8,18 @@ import { RailService } from '../RailService/RailService';
 import { StationInput } from '../StationInput/StationInput';
 import { useSearch } from '../../SearchContext';
 import { useRecentSearch } from '../../RecentSearchesContext';
+import { useSearchParams } from '@solidjs/router';
 
 export const InputForm = () => {
 	const [searchData, setSearchData] = useSearch();
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	setSearchData({
+		from: searchParams.from || null,
+		fromName: searchParams.fromName || null,
+		to: searchParams.to || null,
+		toName: searchParams.toName || null,
+	});
 
 	const [departures, setDepartures] = createStore([]);
 	const [recentSearches, setRecentSearches] = useRecentSearch();

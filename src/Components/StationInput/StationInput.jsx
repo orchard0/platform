@@ -4,6 +4,7 @@ import { stationPicker } from '../utils';
 import styles from './StationInput.module.css';
 import { produce } from 'solid-js/store';
 import { useSearch } from '../../SearchContext';
+import { useSearchParams } from '@solidjs/router';
 
 const delay = (fn, ms) => {
 	let timer = 0;
@@ -16,6 +17,7 @@ const delay = (fn, ms) => {
 export const StationInput = (props) => {
 	const type = props.type;
 	const [searchData, setSearchData] = useSearch();
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [show, setShow] = createSignal(false);
 	const [stationName, setStationName] = createSignal('');
@@ -23,6 +25,21 @@ export const StationInput = (props) => {
 		stationName,
 		stationPicker
 	);
+
+	const setData = (station) => {
+		setSearchData(
+			produce((state) => {
+				state[type + 'Name'] = station.name;
+				state[type] = station.crs;
+			})
+		);
+		setSearchParams({
+			[type + 'Name']: station.name,
+			[type]: station.crs,
+		});
+
+		setShow(false);
+	};
 
 	createEffect(() => {
 		// TODO is there a better way to setShow to true when stations updates?
@@ -49,14 +66,7 @@ export const StationInput = (props) => {
 							return (
 								<p
 									onClick={() => {
-										setSearchData(
-											produce((state) => {
-												state[type + 'Name'] =
-													station.name;
-												state[type] = station.crs;
-											})
-										);
-										setShow(false);
+										setData(station);
 									}}>
 									{station.name} <abbr>{station.crs}</abbr>
 								</p>

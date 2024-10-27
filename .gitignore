@@ -2,7 +2,8 @@ node_modules
 dist
 *.local
 .env.*
-rail.py
 TODO
 Reference/
 .vercel
+localStorages
+package-lock.json
