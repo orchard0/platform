@@ -2,8 +2,6 @@
 
 Know the platform before it appears in station and get the next fastest train to your destination. Built using SolidJS front-end. This repo contains the frontend source code.
 
-Hosted version is [here.](https://railplatform.vercel.app/)
-
 ## Getting Started
 
 1. Run `npm i` to install dependencies.
