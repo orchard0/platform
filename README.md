@@ -2,11 +2,12 @@
 
 Know the platform before it appears in station and get the next fastest train to your destination. Built using SolidJS front-end. This repo contains the frontend source code.
 
-The Platform app (left) shows the platform for the 16:33 service to Manchester Piccadilly before other apps.
+Example: The Platform app (left) shows the platform for the 16:33 service to Manchester Piccadilly before other apps.
 
-<img src="./assets/Platform.png" alt="Platform app showing the departure platform" width="200"/>
+<div><img src="./assets/Platform.png" alt="Platform app showing the departure platform" width="200"/>
 <img src="./assets/National Rail.png" alt="National Rail site" width="200"/>
-<img src="./assets/Fasteroute app.png" alt="Fasteroute app" width="200"/>
+<img src="./assets/Fasteroute app.png" alt="Fasteroute app" width="200"/></div>
+
 
 ## Getting Started
 
